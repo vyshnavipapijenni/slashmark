@@ -1,0 +1,98 @@
+// Function to fetch and display weather data
+function showWeather() {
+    const city = document.getElementById('city').value.trim();
+    const apiKey = '85f73dc30c59146444f8b6b9e6e95095'; // Replace with your actual OpenWeather API key
+    const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+    if (city === "") {
+        alert("Please enter a city name.");
+        return;
+    }
+
+    // Fetch current weather
+    fetch(currentWeatherUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("City not found! Please try a different city.");
+            }
+            return response.json();
+        })
+        .then(data => {
+            displayCurrentWeather(data);
+
+            // Fetch 5-day forecast using latitude and longitude
+            const { lat, lon } = data.coord;
+            fetchFiveDayForecast(lat, lon);
+        })
+        .catch(error => {
+            alert(error.message || 'Error fetching weather data. Please try again later.');
+        });
+}
+
+// Function to display current weather data
+function displayCurrentWeather(data) {
+    const cityName = document.getElementById('cityName');
+    const temperature = document.getElementById('temperature');
+    const description = document.getElementById('description');
+    const humidity = document.getElementById('humidity');
+    const windSpeed = document.getElementById('windSpeed');
+
+    if (cityName && temperature && description && humidity && windSpeed) {
+        cityName.innerText = `City: ${data.name}`;
+        temperature.innerText = `Temperature: ${data.main.temp}°C`;
+        description.innerText = `Description: ${data.weather[0].description}`;
+        humidity.innerText = `Humidity: ${data.main.humidity}%`;
+        windSpeed.innerText = `Wind Speed: ${data.wind.speed} km/h`;
+    } else {
+        console.error("One or more elements are missing in the HTML.");
+    }
+}
+
+// Function to fetch and display the 5-day forecast
+function fetchFiveDayForecast(lat, lon) {
+    const apiKey = '85f73dc30c59146444f8b6b9e6e95095'; // Replace with your actual OpenWeather API key
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+
+    fetch(forecastUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Error fetching forecast!");
+            }
+            return response.json();
+        })
+        .then(data => {
+            displayFiveDayForecast(data);
+        })
+        .catch(error => {
+            alert(error.message || 'Error fetching forecast data. Please try again later.');
+        });
+}
+
+// Function to display 5-day forecast data
+function displayFiveDayForecast(data) {
+    const forecastContainer = document.getElementById('forecast');
+    if (!forecastContainer) {
+        console.error("Forecast container element is missing in the HTML.");
+        return;
+    }
+
+    forecastContainer.innerHTML = ""; // Clear previous forecasts
+
+    // Filter the list to get 1 forecast per day at 12:00 PM
+    const dailyForecasts = data.list.filter(entry => entry.dt_txt.includes("12:00:00"));
+
+    dailyForecasts.forEach(day => {
+        const date = new Date(day.dt_txt).toLocaleDateString();
+        const temp = day.main.temp;
+        const desc = day.weather[0].description;
+
+        const forecastItem = document.createElement("div");
+        forecastItem.className = "forecast-item";
+        forecastItem.innerHTML = `
+            <h3>${date}</h3>
+            <p>Temperature: ${temp}°C</p>
+            <p>Description: ${desc}</p>
+        `;
+        forecastContainer.appendChild(forecastItem);
+    });
+}
