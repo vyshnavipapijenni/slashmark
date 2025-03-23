@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-image: url("weather1.jpg"); /* Add the background image */
+            background-size: cover; /* Ensure it covers the entire screen */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Prevent tiling */
+            color: white; /* Ensure text is visible on the background */
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+        }
+        input {
+            width: 300px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .weather-info, .forecast-container {
+            margin-top: 20px;
+            background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background */
+            padding: 20px;
+            border-radius: 20px;
+            display: inline-block;
+            text-align: left;
+        }
+        .forecast-container {
+            margin-top: 30px;
+            display: flex; /* Use flexbox for horizontal layout */
+            justify-content: center; /* Center the forecast items */
+            gap: 10px; /* Add spacing between items */
+            flex-wrap: wrap; /* Ensure items wrap on smaller screens */
+        }
+        .forecast-item {
+            width: 150px; /* Set a fixed width for each forecast item */
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1); /* Light semi-transparent background */
+            text-align: center; /* Center the text inside each item */
+        }
+        h1, h2, h3 {
+            color: #FFD700; /* Golden color for headings */
+        }
+    </style>
+</head>
+<body>
+    <h1>Weather App</h1>
+    <input type="text" id="city" placeholder="Enter city name">
+    <button onclick="showWeather()">Get Weather</button>
+
+    <!-- Current Weather Information -->
+    <div class="weather-info">
+        <h2 id="cityName"></h2>
+        <p id="temperature"></p>
+        <p id="description"></p>
+        <p id="humidity"></p>
+        <p id="windSpeed"></p>
+    </div>
+
+    <!-- 5-Day Weather Forecast -->
+    <div class="forecast-container" id="forecast">
+        <h2>5-Day Forecast:</h2>
+        <!-- Forecast items will be dynamically added here by JavaScript -->
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
